@@ -1,0 +1,38 @@
+sudo: required
+language: generic
+
+services:
+  - docker
+
+before_install:
+  - docker build -t kaustubhrd/react-test -f ./client/Dockerfile.dev ./client
+
+script:
+  - docker run -e CI=true kaustubhrd/react-test npm run test
+
+after_success:
+  - docker build -t kaustubhrd/multi-client ./client
+  - docker build -t kaustubhrd/multi-nginx ./nginx
+  - docker build -t kaustubhrd/multi-server ./server
+  - docker build -t kaustubhrd/multi-worker ./worker
+  # Log in to the docker CLI
+  - echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_ID" --password-stdin
+  # Take those images and push them to docker hub
+  - docker push kaustubh/multi-client
+  - docker push kaustubh/multi-nginx
+  - docker push kaustubh/multi-server
+  - docker push kaustubh/multi-worker
+
+
+
+# deploy:
+#   provider: elasticbeanstalk
+#   region: 'us-east-2'
+#   app: 'docker-react'
+#   env: 'Dockerreact-env'
+#   bucket_name: 'elasticbeanstalk-us-east-2-065336412663'
+#   bucket_path: 'docker-react'
+#   on:
+#     branch: master
+#   access_key_id: $AWS_ACCESS_KEY
+#   secret_access_key: $AWS_SECRET_KEY
