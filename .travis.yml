@@ -8,7 +8,7 @@ before_install:
   - docker build -t kaustubhrd/react-test -f ./client/Dockerfile.dev ./client
 
 script:
-  - docker run -e CI=true kaustubhrd/react-test npm run test
+  - docker run -e CI=true kaustubhrd/react-test npm test
 
 after_success:
   - docker build -t kaustubhrd/multi-client ./client
@@ -23,16 +23,14 @@ after_success:
   - docker push kaustubhrd/multi-server
   - docker push kaustubhrd/multi-worker
 
-
-
-# deploy:
-#   provider: elasticbeanstalk
-#   region: 'us-east-2'
-#   app: 'docker-react'
-#   env: 'Dockerreact-env'
-#   bucket_name: 'elasticbeanstalk-us-east-2-065336412663'
-#   bucket_path: 'docker-react'
-#   on:
-#     branch: master
-#   access_key_id: $AWS_ACCESS_KEY
-#   secret_access_key: $AWS_SECRET_KEY
+deploy:
+  provider: elasticbeanstalk
+  region: 'us-east-1'
+  app: 'multi-docker'
+  env: 'MultiDocker-env'
+  bucket_name: 'elasticbeanstalk-us-east-1-065336412663'
+  bucket_path: 'docker-multi'
+  on:
+    branch: master
+  access_key_id: $AWS_ACCESS_KEY
+  secret_access_key: $AWS_SECRET_KEY
