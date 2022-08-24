@@ -18,10 +18,10 @@ after_success:
   # Log in to the docker CLI
   - echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_ID" --password-stdin
   # Take those images and push them to docker hub
-  - docker push kaustubh/multi-client
-  - docker push kaustubh/multi-nginx
-  - docker push kaustubh/multi-server
-  - docker push kaustubh/multi-worker
+  - docker push kaustubhrd/multi-client
+  - docker push kaustubhrd/multi-nginx
+  - docker push kaustubhrd/multi-server
+  - docker push kaustubhrd/multi-worker
 
 
 
